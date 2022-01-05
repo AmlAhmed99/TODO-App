@@ -12,7 +12,7 @@ class Archived extends StatelessWidget {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        var tasks = AppCubit.get(context).newTasks;
+        var tasks = AppCubit.get(context).archiveTasks;
         return ConditionalBuilder(
           condition: tasks.isNotEmpty,
           fallback: (context) {

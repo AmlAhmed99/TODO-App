@@ -9,7 +9,7 @@ import 'package:todo_app/shared/cubit/states.dart';
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
   bool isBottomSheet = false;
-  IconData fabicon;
+  IconData fabicon= Icons.edit;
 
   Database database;
   var newTasks = [];
@@ -49,8 +49,7 @@ class AppCubit extends Cubit<AppStates> {
     @required String time,
   }) async {
     await database.transaction((txn) {
-      txn
-          .rawInsert(
+      txn.rawInsert(
               'INSERT Into tasks (title ,date ,time ,status) VALUES  ("$title","$date","$time","new")')
           .then((value) {
         print('inserted successfully');
@@ -64,18 +63,21 @@ class AppCubit extends Cubit<AppStates> {
   }
 
   // database is await but database inside created first.
-  getDataFromDatabase(database) {
+  void getDataFromDatabase(database) {
     newTasks = [];
     doneTasks = [];
     archiveTasks = [];
-    emit(AppGetDatabaseState());
+
+    print('show successfully');
     database.rawQuery('SELECT * FROM tasks').then((value) {
+      emit(AppGetDatabaseState());
       value.forEach((element) {
         if (element['status'] == 'new')
           newTasks.add(element);
         else if (element['status'] == 'done')
           doneTasks.add(element);
-        else if (element['status'] == 'archive') archiveTasks.add(element);
+        else if (element['status'] == 'archive')
+          archiveTasks.add(element);
       });
     });
   }

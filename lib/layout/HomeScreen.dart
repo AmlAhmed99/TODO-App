@@ -6,6 +6,7 @@ import 'package:todo_app/shared/cubit/cubit.dart';
 import 'package:todo_app/shared/cubit/states.dart';
 
 class homeScreen extends StatelessWidget {
+  static const homeScreenRoute='homeScreenRoute';
   var scaffoldkey = GlobalKey<ScaffoldState>();
   var formkey = GlobalKey<FormState>();
 
@@ -41,8 +42,7 @@ class homeScreen extends StatelessWidget {
                         time: TaskTimeEditingController.text);
                   }
                 } else {
-                  scaffoldkey.currentState
-                      .showBottomSheet(
+                  scaffoldkey.currentState.showBottomSheet(
                         (context) => Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Form(
@@ -106,12 +106,13 @@ class homeScreen extends StatelessWidget {
                                             context: context,
                                             initialDate: DateTime.now(),
                                             firstDate: DateTime.now(),
-                                            lastDate:
-                                                DateTime.parse('2021-11-03'))
+                                            lastDate:DateTime.now().add(Duration(days: 355)),
+                                    )
                                         .then((value) {
                                       TaskDateEditingController.text =
                                           DateFormat.yMMMd().format(value);
-                                    });
+                                    }
+                                    );
                                   },
                                 ),
                               ],
@@ -119,13 +120,12 @@ class homeScreen extends StatelessWidget {
                           ),
                         ),
                         elevation: 10,
-                      )
-                      .closed
+                      ).closed
                       .then((value) {
                     cubit.ChangeButtomSheet(false, Icons.edit);
                   });
-                  cubit.ChangeButtomSheet(true, Icons.add);
                 }
+                cubit.ChangeButtomSheet(true, Icons.add);
               },
             ),
             body: cubit.screens[cubit.currentIndex],

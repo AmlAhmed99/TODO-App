@@ -14,7 +14,7 @@ class Tasks extends StatelessWidget {
       builder: (context, state) {
         var tasks = AppCubit.get(context).newTasks;
         return ConditionalBuilder(
-          condition: tasks.isNotEmpty,
+          condition: !tasks.isEmpty,
           fallback: (context) {
             return NoTasks();
           },

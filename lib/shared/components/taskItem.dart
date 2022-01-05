@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_app/shared/cubit/cubit.dart';
+import 'package:todo_app/shared/cubit/states.dart';
 
 class TaskItem extends StatelessWidget {
   Map model;
@@ -8,7 +10,7 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dismissible(
+    return  Dismissible(
       key: Key(model['id'].toString()),
       onDismissed: (direction) {
         AppCubit.get(context).deleteData(id: model['id']);
@@ -59,8 +61,7 @@ class TaskItem extends StatelessWidget {
                 color: Colors.green,
               ),
               onPressed: () {
-                AppCubit.get(context)
-                    .updateData(status: 'done', id: model['id']);
+                AppCubit.get(context).updateData(status: 'done', id: model['id']);
               },
             ),
             IconButton(
@@ -69,13 +70,13 @@ class TaskItem extends StatelessWidget {
                 color: Colors.black54,
               ),
               onPressed: () {
-                AppCubit.get(context)
-                    .updateData(status: 'archive', id: model['id']);
+                AppCubit.get(context).updateData(status: 'archive', id: model['id']);
               },
             )
           ],
         ),
       ),
     );
+
   }
 }
