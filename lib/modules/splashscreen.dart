@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
           child:Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/images/todo.png',height: 180,),
+              Image.asset('assets/images/todo1.png',height: 180,),
               SizedBox(height: 50,),
               CircularProgressIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(Color.fromRGBO(

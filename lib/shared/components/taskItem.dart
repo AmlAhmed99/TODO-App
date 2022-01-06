@@ -25,6 +25,8 @@ class TaskItem extends StatelessWidget {
               backgroundColor: Colors.blue,
               child: Text(
                 '${model['title']}',
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
                 style: TextStyle(
                   color: Colors.white,
                 ),

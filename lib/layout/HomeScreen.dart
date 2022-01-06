@@ -1,18 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app/shared/components/dafaultFormField.dart';
 import 'package:todo_app/shared/cubit/cubit.dart';
 import 'package:todo_app/shared/cubit/states.dart';
 
-class homeScreen extends StatelessWidget {
+class homeScreen extends StatefulWidget {
   static const homeScreenRoute='homeScreenRoute';
-  var scaffoldkey = GlobalKey<ScaffoldState>();
+
+  @override
+  _homeScreenState createState() => _homeScreenState();
+}
+
+class _homeScreenState extends State<homeScreen> {
+  FlutterLocalNotificationsPlugin fltrNotification;
+  var scheduledTime;
+   var hours,minutes,days,years,month;
+  var TaskTitleEditingController = TextEditingController();
+
+  var TaskTimeEditingController = TextEditingController();
+
+  var TaskDateEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    var androidInitilize = new AndroidInitializationSettings('app_icon');
+    var iOSinitilize = new IOSInitializationSettings();
+    var initilizationsSettings =
+    new InitializationSettings(androidInitilize, iOSinitilize);
+    fltrNotification = new FlutterLocalNotificationsPlugin();
+    fltrNotification.initialize(initilizationsSettings,
+        onSelectNotification: notificationSelected);
+  }
+  Future notificationSelected(String payload) async {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("Notification : $payload"),
+      ),
+    );
+  }
+  Future showNotification() async {
+    var androidDetails = new AndroidNotificationDetails(
+        "Channel ID", "Desi programmer", "This is my channel",
+        importance: Importance.Max);
+    var iSODetails = new IOSNotificationDetails();
+    var generalNotificationDetails =
+    new NotificationDetails(androidDetails, iSODetails);
+
+     fltrNotification.show(
+        0, TaskTitleEditingController.text, "You created a anew Task",
+        generalNotificationDetails, payload: "Task").then((value) {
+
+     }).then((value) {
+       print('successssssssss');
+     }).catchError((error){
+       print('errorrrrrrrrrrrrrrr');
+     });
+
+    var scheduledTime =new DateTime(years,month,days,4,minutes,0);
+
+    await fltrNotification.schedule(2, "Times Uppp!!!", TaskTitleEditingController.text,
+        scheduledTime , generalNotificationDetails);
+
+  }
+
+
+
+    var scaffoldkey = GlobalKey<ScaffoldState>();
+
   var formkey = GlobalKey<FormState>();
 
-  var TaskTitleEditingController = TextEditingController();
-  var TaskTimeEditingController = TextEditingController();
-  var TaskDateEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +101,7 @@ class homeScreen extends StatelessWidget {
                         title: TaskTitleEditingController.text,
                         date: TaskDateEditingController.text,
                         time: TaskTimeEditingController.text);
+                    showNotification();
                   }
                 } else {
                   scaffoldkey.currentState.showBottomSheet(
@@ -81,9 +143,12 @@ class homeScreen extends StatelessWidget {
                                             context: context,
                                             initialTime: TimeOfDay.now())
                                         .then((value) {
-                                      TaskTimeEditingController.text =
-                                          value.format(context).toString();
-                                      print(value.format(context).toString());
+                                      TaskTimeEditingController.text = value.format(context).toString();
+                                      hours=value.hour;
+                                      minutes=value.minute;
+                                      print(hours);
+                                      print(minutes);
+
                                     });
                                   },
                                 ),
@@ -111,6 +176,13 @@ class homeScreen extends StatelessWidget {
                                         .then((value) {
                                       TaskDateEditingController.text =
                                           DateFormat.yMMMd().format(value);
+                                      month=value.month;
+                                      years=value.year;
+                                      days=value.day;
+                                      print(month);
+                                      print(years);
+                                      print(days);
+
                                     }
                                     );
                                   },
